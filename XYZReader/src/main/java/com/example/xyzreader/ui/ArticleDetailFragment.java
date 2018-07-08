@@ -37,15 +37,14 @@ import com.squareup.picasso.Picasso;
 public class ArticleDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = ArticleDetailActivity.class.getSimpleName();
-    private static final String THUMBNAIL = "THUMBNAIL";
-    private static final String FULL_SIZE = "FULL_SIZE";
-    public static final String ARG_ITEM_ID = "item_id";
+    private static final String THUMBNAIL_IMAGE = "THUMBNAIL_IMAGE";
+    private static final String SIZE = "SIZE";
+    public static final String ID = "id";
 
     private Cursor mCursor;
     private long mItemId;
     private View mRootView;
     private int mMutedColor = 0xFF333333;
-    private ScrollView mScrollView;
 
     private ImageView mPhotoView;
 
@@ -58,7 +57,7 @@ public class ArticleDetailFragment extends Fragment implements
 
     public static ArticleDetailFragment newInstance(long itemId) {
         Bundle arguments = new Bundle();
-        arguments.putLong(ARG_ITEM_ID, itemId);
+        arguments.putLong(ID, itemId);
         ArticleDetailFragment fragment = new ArticleDetailFragment();
         fragment.setArguments(arguments);
         return fragment;
@@ -68,8 +67,8 @@ public class ArticleDetailFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItemId = getArguments().getLong(ARG_ITEM_ID);
+        if (getArguments().containsKey(ID)) {
+            mItemId = getArguments().getLong(ID);
         }
 
         setHasOptionsMenu(true);
@@ -78,12 +77,8 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        // In support library r8, calling initLoader for a fragment in a FragmentPagerAdapter in
-        // the fragment's onCreate may cause the same LoaderManager to be dealt to multiple
-        // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
-        // we do this in onActivityCreated.
-        getLoaderManager().initLoader(0, null, this);
+        int nul =0;
+        getLoaderManager().initLoader(nul, null, this);
     }
 
     @Override
@@ -102,8 +97,8 @@ public class ArticleDetailFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
-                        .setType("text/plain")
-                        .setText("Some sample text")
+                        .setType(getString(R.string.text_plain))
+                        .setText(getString(R.string.sample_text))
                         .getIntent(), getString(R.string.action_share)));
             }
         });
@@ -146,7 +141,7 @@ public class ArticleDetailFragment extends Fragment implements
 
     public void setToolbarImage() {
         if (mCursor != null) {
-            setImageWithUrl(mCursor.getString(ArticleLoader.Query.THUMB_URL), THUMBNAIL);
+            setImageWithUrl(mCursor.getString(ArticleLoader.Query.THUMB_URL), THUMBNAIL_IMAGE);
         }
     }
 
@@ -163,12 +158,12 @@ public class ArticleDetailFragment extends Fragment implements
                     @Override
                     public void onSuccess() {
                         Log.i(TAG, "Image was load from " + thumbnailUrl);
-                        if (type.equals(THUMBNAIL)) {
+                        if (type.equals(THUMBNAIL_IMAGE)) {
                             setTitleBackgroundDarkMutedColour();
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 getActivity().startPostponedEnterTransition();
                             }
-                            setImageWithUrl(mCursor.getString(ArticleLoader.Query.PHOTO_URL), FULL_SIZE);
+                            setImageWithUrl(mCursor.getString(ArticleLoader.Query.PHOTO_URL), SIZE);
                         }
                     }
 
@@ -184,12 +179,12 @@ public class ArticleDetailFragment extends Fragment implements
                                     public void onSuccess() {
                                         Log.i(TAG, "Image was load from " + thumbnailUrl);
                                         // load high resolution picture afterwards
-                                        if (type.equals(THUMBNAIL)) {
+                                        if (type.equals(THUMBNAIL_IMAGE)) {
                                             setTitleBackgroundDarkMutedColour();
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                                 getActivity().startPostponedEnterTransition();
                                             }
-                                            setImageWithUrl(mCursor.getString(ArticleLoader.Query.PHOTO_URL), FULL_SIZE);
+                                            setImageWithUrl(mCursor.getString(ArticleLoader.Query.PHOTO_URL), SIZE);
                                         }
                                     }
 

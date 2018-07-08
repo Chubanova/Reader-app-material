@@ -9,5 +9,7 @@
 
     <string name="up">Up</string>
     <string name="share_el">back_image</string>
+    <string name="text_plain">text/plain</string>
+    <string name="sample_text">Some sample text</string>
 
 </resources>
