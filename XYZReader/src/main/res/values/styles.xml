@@ -23,7 +23,14 @@
 
     <style name="Theme.Bacon.Detail">
         <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!-- your app branding color for the app bar -->
+        <item name="colorPrimary">@color/theme_primary</item>
+
+        <!-- darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+
+        <!-- theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/theme_accent</item>
     </style>
-
-
 </resources>
